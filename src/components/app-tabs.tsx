@@ -37,19 +37,31 @@ const TABS: TabConfig[] = [
     name: "index",
     href: "/",
     label: "Home",
-    icon: { ios: "house", web: "home" },
+    icon: { ios: "house", android: "home", web: "home" },
   },
   {
-    name: "explore",
-    href: "/explore",
-    label: "Explore",
-    icon: { ios: "safari", web: "search" },
+    name: "workouts",
+    href: "/workouts",
+    label: "Workouts",
+    icon: { ios: "dumbbell", android: "fitness_center", web: "fitness_center" },
+  },
+  {
+    name: "meals",
+    href: "/meals",
+    label: "Meals",
+    icon: { ios: "fork.knife", android: "restaurant", web: "restaurant" },
   },
   {
     name: "habits",
     href: "/habits",
     label: "Habits",
-    icon: { ios: "timer", web: "timer" },
+    icon: { ios: "timer", android: "timer", web: "timer" },
+  },
+  {
+    name: "profile",
+    href: "/profile",
+    label: "Profile",
+    icon: { ios: "person", android: "person", web: "person" },
   },
 ];
 
