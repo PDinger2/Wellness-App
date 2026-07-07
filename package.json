@@ -10,6 +10,7 @@
     "@gluestack-ui/utils": "^5.0.1-alpha.0",
     "@legendapp/motion": "^2.4.0",
     "@react-native-async-storage/async-storage": "2.2.0",
+    "@react-native-community/datetimepicker": "9.1.0",
     "@supabase/supabase-js": "^2.110.1",
     "date-fns": "^4.4.0",
     "expo": "~57.0.4",

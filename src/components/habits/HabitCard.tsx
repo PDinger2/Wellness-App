@@ -8,33 +8,33 @@ type habitCardProps = {
     title: string;
     time: string;
     isDone: boolean;
+    onToggle: () => void;
 }
 
 export function HabitCard({
     title,
     time,
-    isDone=false
+    isDone=false,
+    onToggle
 }: habitCardProps) {
 
-    const [ finished, setFinished ] = useState(isDone)
-    const onToggle = () => setFinished(!finished)
 
     return (
         <Card mode="contained">
             <Card.Title
                 title={<Text style={{
-                    textDecorationLine: finished ? "line-through" : "none",
-                    opacity: finished ? 0.6 : 1
+                    textDecorationLine: isDone ? "line-through" : "none",
+                    opacity: isDone ? 0.6 : 1
                 }}>
                     {title}
                 </Text>}
                 subtitle={<Text style={{
-                    opacity: finished ? 0.6 : 1
+                    opacity: isDone ? 0.6 : 1
                 }}>
                     {time}
                 </Text>}
                 left={() => (
-                    <Switch value={finished} onValueChange={onToggle}/>
+                    <Switch value={isDone} onValueChange={onToggle}/>
                 )}
             />
         </Card>

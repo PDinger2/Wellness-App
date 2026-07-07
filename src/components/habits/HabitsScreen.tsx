@@ -8,20 +8,34 @@ import { WeekStrip } from "./WeekStrip";
 import { View } from "react-native";
 import { HabitAnimatedFAB } from "./HabitAnimatedFAB";
 import { HabitCard } from "./HabitCard";
+import { getTodaysDate } from "@/lib/time_management/week";
+import { CompletionsByDate, Habit, isHabitDone } from "@/lib/habits/habits";
 
-type Habit = {
-  title: string;
-  time: string;
-  isDone: boolean;
-}
 
 export default function HabitsScreen() {
-  const [ habitsComplete, setHabitsComplete ] = useState(0)
-  const [ habitNumber, setHabitNumber ] = useState(0)
-  const [ selectedDate, setSelectedDate ] = useState("")
+  const [ selectedDate, setSelectedDate ] = useState(getTodaysDate())
   const [ fabExtended, setFabExtended ] = useState(true);
   const [ habitArray, setHabitArray ] = useState<Habit[]>([])
+  const [ habitCompletions, setHabitCompletions ] = useState<CompletionsByDate>({});
 
+  const toggleHabit = ({habitId, habitDate}) => {
+    setHabitCompletions((prev) => {
+      const cur = prev[habitDate] ?? []
+
+      const next = cur.includes(habitId)
+        ? cur.filter((id) => id !== habitId)
+        : [...cur, habitId]
+
+      return { ...prev, [habitDate]: next}
+    })
+  }
+
+  const habitsForDay = habitArray;
+  const habitNumber = habitsForDay.length;
+  // use .filter to grab number of habits complete based on result of isHabitDone() for given habit
+  const habitsComplete = habitsForDay.filter((habit) =>
+    isHabitDone(habit.id, selectedDate, habitCompletions)
+  ).length
 
   const onScroll = ({ nativeEvent }) => {
     const currentPos = Math.floor(nativeEvent?.contentOffset?.y) ?? 0
@@ -29,12 +43,10 @@ export default function HabitsScreen() {
   }
   useEffect(() => {
     setHabitArray([
-      { title: "Stretch", time: "9:30 am", isDone: false},
-      { title: "Meditate", time: "12:00 pm", isDone: false},
-      { title: "Read for 30 minutes", time: "6:00 pm", isDone: false}
+      { id: 1, title: "Stretch", time: "9:30 am" },
+      { id: 2, title: "Meditate", time: "12:00 pm" },
+      { id: 3, title: "Read for 30 minutes", time: "6:00 pm" }
     ])
-
-    setHabitNumber(habitArray.length)
   }, [])
     return (
         <>
@@ -45,14 +57,18 @@ export default function HabitsScreen() {
                     <Text variant="titleMedium">{habitsComplete}/{habitNumber} complete</Text>
                 </HStack>
                 <VStack style={styles.columnContainer} space="md">
-                  <WeekStrip/>
+                  <WeekStrip
+                    selectedDate={selectedDate}
+                    onSelectDate={setSelectedDate}
+                  />
                   <Divider bold style={{ width: "100%" }}/>
-                  {habitArray.map((habit, index) => (
+                  {habitArray.map((habit) => (
                     <HabitCard
-                      key={index}
+                      key={habit.id}
                       title={habit.title}
                       time={habit.time}
-                      isDone={habit.isDone}
+                      isDone={isHabitDone(habit.id, selectedDate, habitCompletions)}
+                      onToggle={() => toggleHabit({ habitId: habit.id, habitDate: selectedDate })}
                     />
                   ))}
                 </VStack>
