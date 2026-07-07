@@ -1,8 +1,11 @@
 import { styles } from "@/constants/styles";
 import { VStack } from "@/components/ui/vstack";
+import { HStack } from "@/components/ui/hstack";
+import { Center } from "@/components/ui/center"
 import { startOfWeek, addDays } from "date-fns"
 import { Text, Button, Avatar, TouchableRipple, useTheme } from "react-native-paper"
-import { useState, useEffect, Fragment } from "react";
+import { useState, useContext } from "react";
+import { WeekButton } from "./WeekButton";
 
 function getWeek() {
     // using Date() and date-fns to get current week, returning array of objects
@@ -10,14 +13,16 @@ function getWeek() {
     const weekArray = Array.from({length: 7}, (_, cur) => {
         const date = addDays(sunday, cur)
         /* return format:
-            label: "Sunday/Monday/Tuesday/etc..."
+            dayOfWeek: "Sunday/Monday/Tuesday/etc..."
             fullDate: "mm/dd/yyyy"
-            dayNumber: "dd" (integer)
+            dayNumber: "dd"
+            label: String containing first letter of day of week ("S"/"M"/"T"/etc...)
         */
         return {
-            label: date.toLocaleString('default', {weekday: "long"}),
+            dayOfWeek: date.toLocaleString('default', {weekday: "long"}),
             fullDate: date.toLocaleString('default', {year: "numeric", day: "numeric", month: "numeric"}),
-            dayNumber: date.toLocaleString('default', {day: "numeric"})
+            dayNumber: date.toLocaleString('default', {day: "numeric"}),
+            label: date.toLocaleString('default', {weekday: "narrow"})
         }
     })
 
@@ -26,18 +31,16 @@ function getWeek() {
 
 
 export function WeekStrip() {
-    const [ selectedDate, setSelectedDate ] = useState(0)
+    const [ selectedDate, setSelectedDate ] = useState("")
     const weekArray = getWeek()
     const days = weekArray.map((day) => day.dayNumber)
     return (
         <>
-        <Text>Days:</Text>
-        <VStack style={styles.columnContainer} space="md">
-            {/* todo: create new component for a button with special functionality, using state to change filled/outline status */}
+        <HStack space="sm" style={styles.rowBox}>
             {weekArray.map((day) => (
-                    <Button mode="contained" compact rippleColor="rgba(0,0,0,0)" onPress={() => console.log("pressed")} key={day.dayNumber}>{day.label} {day.fullDate}</Button>
+                    <WeekButton key={day.fullDate} day={day} selectedDate={selectedDate} onPress={() => setSelectedDate(day.dayNumber)} />
             ))}
-        </VStack>
+        </HStack>
         </>
     )
 }

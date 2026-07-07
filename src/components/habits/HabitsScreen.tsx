@@ -9,13 +9,14 @@ import { WeekStrip } from "./WeekStrip";
 export default function HabitsScreen() {
   const [ habitsComplete, setHabitsComplete ] = useState(0)
   const [ habitNumber, setHabitNumber ] = useState(0)
+  const [ selectedDate, setSelectedDate ] = useState("")
   useEffect(() => {
     setHabitNumber(3)
   }, [])
     return (
         <>
           <SafeAreaView style={styles.safeArea}>
-                <HStack style={styles.headerRow}>
+                <HStack style={styles.rowBox}>
                     <Text variant="headlineLarge">Habits</Text>
                     <Text variant="titleMedium">{habitsComplete}/{habitNumber} complete</Text>
                 </HStack>

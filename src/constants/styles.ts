@@ -2,7 +2,7 @@ import { BottomTabInset, MaxContentWidth, Spacing } from "@/constants/theme"
 import { StyleSheet } from "react-native"
 
 export const styles = StyleSheet.create({
-    rowContainer: {
+    container: {
         flex: 1,
         justifyContent: 'center',
         flexDirection: 'row',
@@ -28,7 +28,7 @@ export const styles = StyleSheet.create({
         paddingHorizontal: Spacing.four,
         gap: Spacing.four,
       },
-      headerRow: {
+      rowBox: {
         flexDirection: "row",
         justifyContent: "space-between",
         alignItems: "center",
@@ -50,5 +50,5 @@ export const styles = StyleSheet.create({
       centerContent: {
         flex: 1,
         gap: Spacing.three,
-      }
+      },
 })
