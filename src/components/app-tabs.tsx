@@ -18,9 +18,9 @@ import { ThemedView } from "./themed-view";
 import { Colors, MaxContentWidth, Spacing } from "@/constants/theme";
 
 // ---- Config -----------------------------------------------------------
-// Add / Remove tabs here. `icon` is typed directly off SymbolView's
-// `name` prop, so `ios`/`web` are checked as literal symbol names
-// instead of being widened to `string` and rejected later.
+// Add/remove tabs here. `icon` is typed directly off SymbolView's own
+// `name` prop, so `ios`/`web` are checked as literal symbol names right
+// here instead of being widened to plain `string` and rejected later.
 
 type SymbolIcon = React.ComponentProps<typeof SymbolView>["name"];
 type TabHref = React.ComponentProps<typeof TabTrigger>["href"];
@@ -36,14 +36,14 @@ const TABS: TabConfig[] = [
   {
     name: "index",
     href: "/",
-    label: "Index",
-    icon: { ios: "bed.double.fill", web: "apartment" },
+    label: "Home",
+    icon: { ios: "house", web: "home" },
   },
   {
     name: "explore",
     href: "/explore",
     label: "Explore",
-    icon: { ios: "globe", web: "globe" },
+    icon: { ios: "safari", web: "search" },
   },
   {
     name: "habits",
@@ -60,13 +60,26 @@ export default function AppTabs() {
   const activeTab = TABS.find((t) => t.href === pathname) ?? TABS[0];
 
   return (
-    <Tabs>
+    <View style={styles.root}>
+      <Tabs>
+        <TabSlot style={{ height: "100%" }} />
+        <TabList asChild>
+          <BottomBar>
+            {TABS.map((tab) => (
+              <TabTrigger
+                key={tab.name}
+                name={tab.name}
+                href={tab.href}
+                asChild
+              >
+                <TabIcon tab={tab} />
+              </TabTrigger>
+            ))}
+          </BottomBar>
+        </TabList>
+      </Tabs>
       <TopBadge activeTab={activeTab} />
-      <TabSlot style={{ height: "100%" }} />
-      <TabList asChild>
-        <BottomBar />
-      </TabList>
-    </Tabs>
+    </View>
   );
 }
 
@@ -106,11 +119,7 @@ function BottomBar(props: TabListProps) {
       ]}
     >
       <ThemedView type="backgroundElement" style={styles.bottomBarInner}>
-        {TABS.map((tab) => (
-          <TabTrigger key={tab.name} name={tab.name} href={tab.href} asChild>
-            <TabIcon tab={tab} />
-          </TabTrigger>
-        ))}
+        {props.children}
       </ThemedView>
     </View>
   );
@@ -152,6 +161,9 @@ function TabIcon({
 // ---- Styles ---------------------------------------------------------------
 
 const styles = StyleSheet.create({
+  root: {
+    flex: 1,
+  },
   // Top badge
   topBadgeContainer: {
     position: "absolute",
