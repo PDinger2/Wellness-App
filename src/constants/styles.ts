@@ -2,10 +2,16 @@ import { BottomTabInset, MaxContentWidth, Spacing } from "@/constants/theme"
 import { StyleSheet } from "react-native"
 
 export const styles = StyleSheet.create({
-    container: {
+    rowContainer: {
         flex: 1,
         justifyContent: 'center',
         flexDirection: 'row',
+      },
+      columnContainer: {
+        flex: 1,
+        flexDirection: "column",
+        flexWrap: "wrap",
+        alignContent: "flex-start"
       },
       safeArea: {
         flex: 1,
