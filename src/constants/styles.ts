@@ -11,7 +11,8 @@ export const styles = StyleSheet.create({
         flex: 1,
         flexDirection: "column",
         flexWrap: "wrap",
-        alignContent: "flex-start"
+        alignSelf: "stretch",
+        alignItems: "center"
       },
       safeArea: {
         flex: 1,
@@ -51,4 +52,9 @@ export const styles = StyleSheet.create({
         flex: 1,
         gap: Spacing.three,
       },
+      animatedFABStyle: {
+        bottom: 16,
+        right: 16,
+        position: "absolute",
+      }
 })
