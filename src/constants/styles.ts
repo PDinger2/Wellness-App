@@ -12,7 +12,7 @@ export const styles = StyleSheet.create({
         flexDirection: "column",
         flexWrap: "wrap",
         alignSelf: "stretch",
-        alignItems: "center"
+        alignItems: "stretch"
       },
       safeArea: {
         flex: 1,
