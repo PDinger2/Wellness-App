@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import { Divider, Text, AnimatedFAB } from "react-native-paper";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { VStack } from "@/components/ui/vstack";
+import { Center } from "../ui/center";
 import { WeekStrip } from "./WeekStrip";
 import { View } from "react-native";
 import { HabitAnimatedFAB } from "./HabitAnimatedFAB";
@@ -68,7 +69,7 @@ export default function HabitsScreen() {
                     onSelectDate={setSelectedDate}
                   />
                   <Divider bold style={{ width: "100%" }}/>
-                  {habitsForDay.map((habit) => (
+                  {habitsForDay.length !== 0 && habitsForDay.map((habit) => (
                     <HabitCard
                       key={habit.id}
                       title={habit.title}
@@ -76,8 +77,14 @@ export default function HabitsScreen() {
                       isDone={isHabitDone(habit.id, selectedDate, habitCompletions)}
                       onToggle={() => toggleHabit({ habitId: habit.id, habitDate: selectedDate })}
                       onDelete={() => removeHabit(habit.id)}
+                  
                     />
                   ))}
+                  {habitsForDay.length === 0 &&
+                    <Center>
+                      <Text>No habits for today...</Text>
+                    </Center>
+                  }
                 </VStack>
             </SafeAreaView>
 
