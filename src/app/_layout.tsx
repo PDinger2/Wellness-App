@@ -1,30 +1,36 @@
-import { AnimatedSplashOverlay } from "@/components/animated-icon";
-import AppTabs from "@/components/app-tabs";
-import { DarkTheme, DefaultTheme, ThemeProvider } from "expo-router";
-import * as SplashScreen from "expo-splash-screen";
-import { useColorScheme } from "react-native";
-import { MD3DarkTheme, MD3LightTheme, PaperProvider } from "react-native-paper";
+import { useEffect, useState } from "react";
+import { Slot, useRouter } from "expo-router";
+import { supabase } from "@/lib/supabase";
 
-import { GluestackUIProvider } from '@/components/ui/gluestack-ui-provider';
-import '@/global.css';
+export default function RootLayout() {
+  const router = useRouter();
+  const [loading, setLoading] = useState(true);
 
-SplashScreen.preventAutoHideAsync();
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data }) => {
+      const session = data.session;
 
-export default function TabLayout() {
-  const colorScheme = useColorScheme();
-  const isDark = (colorScheme === "dark");
-  const curTheme = (isDark ? MD3DarkTheme : MD3LightTheme);
-  const themeProviderTheme = (isDark ? DarkTheme : DefaultTheme);
-  return (
-    
-    <GluestackUIProvider mode="dark">
-      <PaperProvider theme={curTheme}>
-      <ThemeProvider value={themeProviderTheme}>
-        <AnimatedSplashOverlay />
-        <AppTabs />
-      </ThemeProvider>
-    </PaperProvider>
-    </GluestackUIProvider>
-  
-  );
+      if (!session) {
+        router.replace("/LoginScreen");
+      }
+
+      setLoading(false);
+    });
+
+    const { data: listener } = supabase.auth.onAuthStateChange(
+      (_event, session) => {
+        if (!session) {
+          router.replace("/LoginScreen");
+        } else {
+          router.replace("/"); // dashboard
+        }
+      },
+    );
+
+    return () => listener.subscription.unsubscribe();
+  }, []);
+
+  if (loading) return null;
+
+  return <Slot />;
 }
