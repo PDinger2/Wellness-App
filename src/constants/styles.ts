@@ -20,6 +20,7 @@ export const styles = StyleSheet.create({
         alignItems: 'center',
         gap: Spacing.three,
         paddingBottom: BottomTabInset + Spacing.three,
+        paddingTop: Spacing.five + Spacing.three,
         maxWidth: MaxContentWidth,
       },
       heroSection: {
