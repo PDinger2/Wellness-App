@@ -1,4 +1,4 @@
-import { Card, Text, Button } from "react-native-paper"
+import { Card, Text, Button, Chip } from "react-native-paper"
 import { HStack } from "../ui/hstack"
 import { VStack } from "../ui/vstack"
 import { styles } from "@/constants/styles"
@@ -17,12 +17,18 @@ export function WorkoutCard({
     difficulty,
     targetAreas
 }: workoutCardProps){
-    console.log("Title: ", title)
     return (
         <Card mode="contained" style={{ width: "100%", alignSelf: "stretch"}}>
             <Card.Title
                 title={<Text>{title}</Text>}
             />
+            <Card.Content>
+                <HStack style={{ width: "100%", flexWrap: "wrap"}} space="sm">
+                    <Chip mode="outlined" compact>{time} mins</Chip>
+                    <Chip mode="outlined" compact>{difficulty}</Chip>
+                    <Chip mode="outlined" compact>{targetAreas}</Chip>
+                </HStack>
+            </Card.Content>
         </Card>
     )
 }

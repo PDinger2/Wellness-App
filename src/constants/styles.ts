@@ -1,4 +1,4 @@
-import { BottomTabInset, MaxContentWidth, Spacing } from "@/constants/theme"
+import { BottomTabInset, MaxContentWidth, Spacing, TopBadgeInset } from "@/constants/theme"
 import { StyleSheet } from "react-native"
 
 export const styles = StyleSheet.create({
@@ -14,13 +14,13 @@ export const styles = StyleSheet.create({
         alignSelf: "stretch",
         alignItems: "stretch"
       },
-      safeArea: {
+      safeAreaView: {
         flex: 1,
         paddingHorizontal: Spacing.four,
         alignItems: 'center',
         gap: Spacing.three,
         paddingBottom: BottomTabInset + Spacing.three,
-        paddingTop: Spacing.five + Spacing.three,
+        paddingTop: TopBadgeInset,
         maxWidth: MaxContentWidth,
       },
       heroSection: {
@@ -66,5 +66,25 @@ export const styles = StyleSheet.create({
         alignSelf: "center",
         width: "100%",
         maxWidth: MaxContentWidth
+      },
+
+      safeArea: {
+        flex: 1,
+        alignItems: "center",
+        maxWidth: MaxContentWidth,
+        alignSelf: "center",
+        width: "100%"
+      },
+      screen: { flex: 1 },
+      scrollContent: {
+        gap: Spacing.three,
+        paddingHorizontal: Spacing.four,
+        paddingTop: Spacing.three,
+        paddingBottom: BottomTabInset
+      },
+      headerStyle: {
+        width: "100%",
+        paddingHorizontal: Spacing.four,
+        paddingTop: TopBadgeInset,
       }
 })
