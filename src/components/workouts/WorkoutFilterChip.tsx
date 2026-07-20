@@ -7,7 +7,7 @@ export function WorkoutFilterChip({ tag, isSelected, onSelect }){
             compact
             selected={isSelected}
             onPress={() => onSelect(isSelected ? "all" : tag)}
-            >{tag}
+            >{tag.charAt(0).toUpperCase() + tag.slice(1)}
         </Chip>
     )
 }
