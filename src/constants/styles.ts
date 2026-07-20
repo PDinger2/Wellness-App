@@ -79,7 +79,6 @@ export const styles = StyleSheet.create({
       scrollContent: {
         gap: Spacing.three,
         paddingHorizontal: Spacing.four,
-        paddingTop: Spacing.three,
         paddingBottom: BottomTabInset
       },
       headerStyle: {

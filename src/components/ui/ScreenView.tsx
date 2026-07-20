@@ -3,13 +3,12 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { ScrollView, ScrollViewProps } from "react-native"
 import { styles } from "@/constants/styles";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { BottomTabInset, Spacing } from "@/constants/theme";
+import { BottomTabInset, Spacing, TopBadgeInset } from "@/constants/theme";
 import React from "react";
 
 type ScreenViewProps = {
   children: React.ReactNode;
   header?: React.ReactNode; // header context is above the scroll area
-  footer?: React.ReactNode; // fixed content below a scroll
   overlay?: React.ReactNode; // modals, floating buttons, etc
   onScroll?: ScrollViewProps["onScroll"]
 }
@@ -17,7 +16,6 @@ type ScreenViewProps = {
 export function ScreenView({
   children,
   header,
-  footer,
   overlay,
   onScroll
  }: ScreenViewProps) {
@@ -31,13 +29,14 @@ export function ScreenView({
           <ScrollView style={{ flex: 1, width: "100%" }}
            contentContainerStyle={[
             styles.scrollContent,
-            {paddingBottom: BottomTabInset + insets.bottom + Spacing.four}]
+            {paddingBottom: BottomTabInset + insets.bottom + Spacing.four,
+              paddingTop: header ? Spacing.three : TopBadgeInset
+            }]
            }
             onScroll={onScroll}
             scrollEventThrottle={16}>
             {children}
           </ScrollView>
-          {footer}
         </SafeAreaView>
         {overlay}
       </ThemedView>
