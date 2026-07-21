@@ -1,6 +1,6 @@
 import { useState, useEffect, useContext } from "react"
 import { userContext } from "../context/userContext";
-import getWorkouts from "@/lib/supabaseFunctions";
+import { getCompletedWorkouts, getWorkouts, setWorkoutComplete } from "@/lib/supabaseFunctions";
 import { WorkoutCard } from "./WorkoutCard";
 import { ScreenView } from "../ui/ScreenView";
 import { Chip, Divider } from "react-native-paper";
@@ -10,16 +10,36 @@ import { WorkoutFilterChip } from "./WorkoutFilterChip";
 import { getWorkoutsWithTag } from "@/lib/workouts";
 import { ScrollView } from "react-native";
 import { Spacing, TopBadgeInset } from "@/constants/theme";
+import { WorkoutsAnimatedFAB } from "./WorkoutsAnimatedFAB";
+import { CompletedWorkoutsModal } from "./CompletedWorkoutsModal";
 
 export default function WorkoutsPage() {
     const { user } = useContext(userContext)
     const [ workoutList, setWorkoutList ] = useState([])
     const [ workoutTags, setWorkoutTags ] = useState([])
     const [ selectedTag, setSelectedTag ] = useState<String>("all")
+    const [ completedWorkouts, setCompletedWorkouts ] = useState([])
+    const [ fabExtended, setFabExtended ] = useState(true);
+    const [ completedModalVisible, setCompletedModalVisible ] = useState(false)
 
+    const onScroll = ({ nativeEvent }) => {
+        const currentPos = Math.floor(nativeEvent?.contentOffset?.y) ?? 0
+        setFabExtended(currentPos <= 0)
+    }
 
     const setFilter = (tag) => {
         setSelectedTag(tag)
+    }
+
+    const getAndSetCompletedWorkouts = () => {
+        getCompletedWorkouts(user).then((data) => {
+            setCompletedWorkouts(data)
+        }).catch((error) => console.log("Error fetching completed workouts: ", error))
+    }
+
+    const handleCompletion = (user, workout) => {
+        setWorkoutComplete(user, workout)
+        getAndSetCompletedWorkouts()
     }
 
     useEffect(() => {
@@ -27,7 +47,9 @@ export default function WorkoutsPage() {
             setWorkoutList(data)
             let tags = [... new Set(data?.flatMap((workout) => workout.goal_tags ?? []))].sort()
             setWorkoutTags(tags)
-        }).catch((error) => console.log("Error on workouts page: ", error))
+        }).catch((error) => console.log("Error while fetching workouts on workouts page: ", error))
+
+        getAndSetCompletedWorkouts()
     }, [user])
 
     const filteredWorkouts = getWorkoutsWithTag(workoutList, selectedTag)
@@ -43,6 +65,22 @@ export default function WorkoutsPage() {
             7. Add calendar
             */}
             <ScreenView
+                onScroll={onScroll}
+
+                overlay={
+                    <>
+                        <WorkoutsAnimatedFAB
+                            extended={fabExtended}
+                            onPress={() => setCompletedModalVisible(true)}
+                        />
+                        <CompletedWorkoutsModal
+                            visible={completedModalVisible}
+                            onDismiss={() => setCompletedModalVisible(false)}
+                            workouts={completedWorkouts}
+                        />
+                    </>
+                }
+
                 header={
                     <>
                         <ScrollView
@@ -73,6 +111,8 @@ export default function WorkoutsPage() {
                     <WorkoutCard
                         key={workout.id}
                         workout={workout}
+                        user={user}
+                        onPress={() => handleCompletion(user, workout)}
                     />
                 ))}
             </ScreenView>

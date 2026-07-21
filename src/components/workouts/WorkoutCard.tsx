@@ -5,14 +5,16 @@ import { styles } from "@/constants/styles"
 import { useState, useContext } from "react"
 import { setWorkoutComplete } from "@/lib/supabaseFunctions"
 import { userContext } from "../context/userContext"
+import { User } from "@supabase/supabase-js"
 
 type workoutCardProps = {
-    workout: Object
+    workout: Object;
+    user: User;
+    onPress: () => void;
 }
 
-export function WorkoutCard({ workout }: workoutCardProps){
+export function WorkoutCard({ workout, user, onPress }: workoutCardProps){
     let difficultyDisplay = workout.difficulty.charAt(0).toUpperCase() + workout.difficulty.slice(1)
-    const { user } = useContext(userContext)
     return (
         <Card mode="contained" style={{ width: "100%", alignSelf: "stretch"}}>
             <Card.Title
@@ -26,7 +28,7 @@ export function WorkoutCard({ workout }: workoutCardProps){
                 </HStack>
             </Card.Content>
             <Card.Actions>
-                <Button onPress={() => setWorkoutComplete(user, workout.id)}>Set as Complete</Button>
+                <Button onPress={onPress}>Set as Complete</Button>
             </Card.Actions>
         </Card>
     )
