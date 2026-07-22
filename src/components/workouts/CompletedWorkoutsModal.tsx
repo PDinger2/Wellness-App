@@ -1,7 +1,6 @@
 import { Button, Text, Modal, Portal, Card, useTheme, Chip, DataTable } from "react-native-paper"
 import { useState, useEffect } from "react"
 import { format } from "date-fns"
-import { ScrollView, useWindowDimensions } from "react-native"
 import { styles } from "@/constants/styles"
 import { HStack } from "@/components/ui/hstack"
 import { VStack } from "../ui/vstack"
@@ -19,7 +18,6 @@ export function CompletedWorkoutsModal({ visible, onDismiss, workouts }: complet
     // should have an entry for each workout, showing data associated with it
     // maybe use a DataTable?
     // modal will be activated via a FAB for now
-    const { height } = useWindowDimensions()
     const [ time, setTime ] = useState(new Date())
     const [ tablePage, setTablePage ] = useState(0)
     const [numberOfItemsPerPageList] = useState([2,3,4])
@@ -37,7 +35,7 @@ export function CompletedWorkoutsModal({ visible, onDismiss, workouts }: complet
             <Modal
                 visible={visible}
                 onDismiss={onDismiss}
-                contentContainerStyle={[styles.modalContent, { maxHeight: height * 0.8 }]}
+                contentContainerStyle={styles.modalContent}
             >
                 <Card mode="contained" style={styles.modalCard}>
                     <Card.Title
@@ -46,20 +44,18 @@ export function CompletedWorkoutsModal({ visible, onDismiss, workouts }: complet
 
                     <Card.Content>
                         {/* main modal content here */}
-                        <ScrollView style={{ maxHeight: height * 0.5 }}>
-                        <Text>Completed workouts: {workouts.length}</Text>
-                        <DataTable>
+                        <DataTable style={{width: "100%"}}>
                             <DataTable.Header>
-                                <DataTable.Title style={{flex: 2}}>Workout</DataTable.Title>
+                                <DataTable.Title style={{flex: 4}}>Workout</DataTable.Title>
                                 <DataTable.Title style={{flex: 1}}>Mins</DataTable.Title>
-                                <DataTable.Title style={{flex: 1.5}}>Date</DataTable.Title>
+                                <DataTable.Title style={{flex: 1}}>Date</DataTable.Title>
                             </DataTable.Header>
 
                             {workouts.slice(from, to).map((workout) => (
                                 <DataTable.Row key={workout.id}>
-                                    <DataTable.Cell style={{flex: 2}}>{workout.name}</DataTable.Cell>
+                                    <DataTable.Cell style={{flex: 4}}>{workout.name}</DataTable.Cell>
                                     <DataTable.Cell style={{flex: 1}}>{workout.duration_min}</DataTable.Cell>
-                                    <DataTable.Cell style={{flex: 1.5}}>{format(new Date(workout.completed_at), "MMM d")}</DataTable.Cell>
+                                    <DataTable.Cell style={{flex: 1}}>{format(new Date(workout.completed_at), "MMM d")}</DataTable.Cell>
                                 </DataTable.Row>
                             ))}
 
@@ -75,7 +71,6 @@ export function CompletedWorkoutsModal({ visible, onDismiss, workouts }: complet
                                 selectPageDropdownLabel={"Rows per page"}
                             />
                         </DataTable>
-                        </ScrollView>
                     </Card.Content>
 
                 </Card>
