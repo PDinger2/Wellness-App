@@ -28,7 +28,7 @@ export function WorkoutCard({ workout, user, onPress }: workoutCardProps){
                 </HStack>
             </Card.Content>
             <Card.Actions>
-                <Button onPress={onPress}>Set as Complete</Button>
+                <Button onPress={onPress}>Start Workout</Button>
             </Card.Actions>
         </Card>
     )

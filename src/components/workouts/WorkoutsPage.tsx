@@ -12,6 +12,7 @@ import { ScrollView } from "react-native";
 import { Spacing, TopBadgeInset } from "@/constants/theme";
 import { WorkoutsAnimatedFAB } from "./WorkoutsAnimatedFAB";
 import { CompletedWorkoutsModal } from "./CompletedWorkoutsModal";
+import { StartWorkoutModal } from "./StartWorkoutModal";
 
 export default function WorkoutsPage() {
     const { user } = useContext(userContext)
@@ -21,6 +22,8 @@ export default function WorkoutsPage() {
     const [ completedWorkouts, setCompletedWorkouts ] = useState([])
     const [ fabExtended, setFabExtended ] = useState(true);
     const [ completedModalVisible, setCompletedModalVisible ] = useState(false)
+    const [ startModalVisible, setStartModalVisible ] = useState(false)
+    const [ selectedWorkout, setSelectedWorkout ] = useState<Object>({})
 
     const onScroll = ({ nativeEvent }) => {
         const currentPos = Math.floor(nativeEvent?.contentOffset?.y) ?? 0
@@ -36,6 +39,11 @@ export default function WorkoutsPage() {
             setCompletedWorkouts(data)
             console.log("Completed workouts: ", data)
         }).catch((error) => console.log("Error fetching completed workouts: ", error))
+    }
+
+    const handleStart = (workout) => {
+        setSelectedWorkout(workout)
+        setStartModalVisible(true)
     }
 
     const handleCompletion = (user, workout) => {
@@ -79,6 +87,12 @@ export default function WorkoutsPage() {
                             onDismiss={() => setCompletedModalVisible(false)}
                             workouts={completedWorkouts}
                         />
+                        <StartWorkoutModal
+                            visible={startModalVisible}
+                            user={user}
+                            onDismiss={() => setStartModalVisible(false)}
+                            workout={selectedWorkout}
+                        />
                     </>
                 }
 
@@ -113,7 +127,7 @@ export default function WorkoutsPage() {
                         key={workout.id}
                         workout={workout}
                         user={user}
-                        onPress={() => handleCompletion(user, workout)}
+                        onPress={() => handleStart(workout)}
                     />
                 ))}
             </ScreenView>
